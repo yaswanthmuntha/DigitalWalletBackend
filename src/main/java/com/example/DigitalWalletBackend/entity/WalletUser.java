@@ -1,5 +1,6 @@
 package com.example.DigitalWalletBackend.entity;
 
+import com.example.DigitalWalletBackend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,7 +43,8 @@ public class WalletUser {
     @Column(nullable = false)
     private String password;
 
-    private String role; //  "USER", "ADMIN"
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private BigDecimal walletBalance;
 
@@ -52,10 +54,10 @@ public class WalletUser {
     private LocalDateTime updatedAt;
 
     // Optional: used if you want to persist OTP temporarily
-    @Transient
+    @Column
     private String otp;
 
-    @Transient
+    @Column
     private LocalDateTime otpGeneratedAt;
 
     @Override

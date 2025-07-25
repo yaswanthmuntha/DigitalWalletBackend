@@ -3,9 +3,11 @@ package com.example.DigitalWalletBackend.service;
 import com.example.DigitalWalletBackend.dto.WalletUserResponseDTO;
 import com.example.DigitalWalletBackend.entity.Address;
 import com.example.DigitalWalletBackend.entity.WalletUser;
+import com.example.DigitalWalletBackend.enums.Role;
 import com.example.DigitalWalletBackend.exception.CustomerNotFoundException;
 import com.example.DigitalWalletBackend.repository.WalletUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +18,8 @@ public class WalletUserServiceImpl implements WalletUserService{
 
     @Autowired
     private WalletUserRepository walletUserRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public WalletUserServiceImpl(WalletUserRepository walletUserRepository) {
         this.walletUserRepository = walletUserRepository;
@@ -32,6 +36,11 @@ public class WalletUserServiceImpl implements WalletUserService{
         user.setPhoneNumber(userInput.getPhoneNumber());
         user.setAadharNo(userInput.getAadharNo());
         user.setPanCardNo(userInput.getPanCardNo());
+
+        // Hashing password
+        user.setPassword(passwordEncoder.encode(userInput.getPassword()));
+        // setting default role
+        user.setRole(Role.USER);
 
         // Embedded Address
         Address address = userInput.getAddress(); // or build it manually
